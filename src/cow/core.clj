@@ -29,15 +29,36 @@ price-weights
 ;;1. don't exceed budget
 
 ;; so each upper bound would be assuming we only got that asset on this run
-;; really it's not the sum of x y and z but the sum of 
+;; really it's not the sum of x y and z but the sum of
+
+(def ideal-shares-x (* 100 0.50))
+
+
+12 * x must be in this interval 
+(fd/interval (- ideal-shares-x 5) (+ ideal-shares-x 5))
+
+
+what we are curious about is x * 12 being in that interval, then what is x
+mplus
 
 (run* [q]
+  (fresh [x y]
+    (membero x (range 0 (inc (/ budget 12))))
+    (membero y (range 0 (inc (/ budget 4))))
+    (fd/eq
+     (<= (+ (* 12 x) (* 4 y)) budget))
+    ;; nice! we probably need one more clause to achieve the max behavior
+    (== q [x y])))
+
+(+ 48 21)
+
+#_(run* [q]
   (fresh [x y z]
     (fd/in x (fd/interval 0 35))
     (fd/in y (fd/interval 0 30))
     (fd/in z (fd/interval 0 40))
     (fd/eq
-     (= 
+     (> 
       100
       (+ x y z)))
     (== q [x y z])))
