@@ -42,21 +42,23 @@ what we are curious about is x * 12 being in that interval, then what is x
 mplus
 
 (run* [q]
-  (fresh [x y]
+  (fresh [a b c d]
     ;; initial goals
     ;; the max for the number of shares would be the value
-    (membero x (range 0 (/ budget 12)))
-    (membero y (range 0 (/ budget 4)))
+    (membero a (range 0 (/ budget 12)))
+    (membero b (range 0 (/ budget 4)))
+    (membero c (range 0 (/ budget 8)))
+    (membero d (range 0 (/ budget 2)))
     ;; goal 1 the sum of the number of shares times their price
     ;; cannot exceed the budget
     (fd/eq
-     (<= (+ (* 12 x) (* 4 y)) budget))
+     (<= (+ (* 12 a) (* 4 b) (* 8 c) (* 8 d)) budget))
     ;; nice! we probably need one more clause to achieve the max behavior
     ;; the difference between the budget and the basket cannot be greater than the cheapest asset
     (fd/eq
-     (> 4 (- budget (+ (* 12 x) (* 4 y)))))
+     (> 2 (- budget (+ (* 12 a) (* 4 b) (* 8 c) (* 8 d)))))
     ;; that is good for today 12/3 :)
-    (== q [x y])))
+    (== q [a b c d])))
 
 (> 4 6)
 (* 7 12)
