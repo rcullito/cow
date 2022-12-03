@@ -43,12 +43,23 @@ mplus
 
 (run* [q]
   (fresh [x y]
-    (membero x (range 0 (inc (/ budget 12))))
-    (membero y (range 0 (inc (/ budget 4))))
+    ;; initial goals
+    ;; the max for the number of shares would be the value
+    (membero x (range 0 (/ budget 12)))
+    (membero y (range 0 (/ budget 4)))
+    ;; goal 1 the sum of the number of shares times their price
+    ;; cannot exceed the budget
     (fd/eq
      (<= (+ (* 12 x) (* 4 y)) budget))
     ;; nice! we probably need one more clause to achieve the max behavior
+    ;; the difference between the budget and the basket cannot be greater than the cheapest asset
+    (fd/eq
+     (> 4 (- budget (+ (* 12 x) (* 4 y)))))
+    ;; that is good for today 12/3 :)
     (== q [x y])))
+
+(> 4 6)
+(* 19 4)
 
 (+ 48 21)
 
