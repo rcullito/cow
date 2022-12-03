@@ -42,22 +42,24 @@ what we are curious about is x * 12 being in that interval, then what is x
 mplus
 
 
-(defn upper-bound [price]
+(defn upper-bound [price weight]
   (-> budget
+      (* weight)
       (/ price)
       Math/ceil
       int
       (+ 2)))
 
-(defn lower-bound [price]
+(defn lower-bound [price weight]
   (-> budget
+      (* weight)
       (/ price)
       Math/floor
       int
       (- 2)))
 
-(defn bookend-num-shares [price]
-  (apply range ((juxt lower-bound upper-bound) price)))
+(defn bookend-num-shares [price weight]
+  (apply range ((juxt lower-bound upper-bound) price weight)))
 
 (def bns bookend-num-shares)
 
@@ -70,23 +72,25 @@ mplus
   (fresh [a b c d e]
     ;; initial goals
     ;; the max for the number of shares would be the value
-    (membero a (bns 12))
-    (membero b (bns 4))
-    (membero c (bns 8))
-    (membero d (bns 2))
-    (membero e (bns 7))
+    (membero a (bns 12 0.3))
+    (membero b (bns 4 0.4))
+    (membero c (bns 8 0.15))
+    (membero d (bns 2 0.075))
+    (membero e (bns 7 0.075))
     ;; goal 1 the sum of the number of shares times their price
     ;; cannot exceed the budget
-    #_(fd/eq
-     (<= (+ (* 12 a) (* 4 b) (* 8 c) (* 8 d) (* 7 e)) budget))
+    (fd/eq
+     (<= (+ (* 12 a) (* 4 b) (* 8 c) (* 2 d) (* 7 e)) budget))
     ;; nice! we probably need one more clause to achieve the max behavior
     ;; the difference between the budget and the basket cannot be greater than the cheapest asset
-    #_(fd/eq
-     (> 2 (- budget (+ (* 12 a) (* 4 b) (* 8 c) (* 8 d) (* 7 e)))))
+    (fd/eq
+     (> 2 (- budget (+ (* 12 a) (* 4 b) (* 8 c) (* 2 d) (* 7 e)))))
     ;; that is good for today 12/3 :)
     (== q [a b c d e])))
 
-(+ (* 12 2) (* 4 13) (* 8 1) (* 8 1) (* 7 1))
+
+[2 10 3 2 1]
+(+ (* 12 2) (* 4 10) (* 8 3) (* 2 2) (* 7 1))
 ;; what is the min
 
 #_(run* [q]
