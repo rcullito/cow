@@ -28,9 +28,14 @@ price-weights
 ;; goals
 ;;1. don't exceed budget
 
+;; so each upper bound would be assuming we only got that asset on this run
+;; really it's not the sum of x y and z but the sum of 
+
 (run* [q]
   (fresh [x y z]
-    (fd/in x y z (fd/interval 0 50))
+    (fd/in x (fd/interval 0 35))
+    (fd/in y (fd/interval 0 30))
+    (fd/in z (fd/interval 0 40))
     (fd/eq
      (= 
       100
